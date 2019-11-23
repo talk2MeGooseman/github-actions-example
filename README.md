@@ -43,7 +43,7 @@ Next we need to create a Github Action Workflow that will run our brand new Java
 1. Locally be manually creating the dependent folder and files
 > Doing it manually is a little more work since on Github.com you can start with using the template bolierplate.
 
-I will going thorugh Method 1. Once were done with Method 1, it will be easy to say how to do it manually.
+I will going through Method 1. Once were done with Method 1, it will be easy to say how to do it manually.
 
 ### Creating your Workflow on Github.com
  - Navigate to your repository homepage on Github
