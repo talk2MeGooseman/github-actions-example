@@ -85,5 +85,30 @@ jobs:
 Congratulations you just made your on JavaScript Github Action and Workflow to run it!!!!!
 
 ## Support Using Packages in JavaScript Actions
+Doing a plain console log is nice and all but its looking kinda plain. Lets spice it up a little by giving the "Hello World" some flair. By using `Boxen` package to put our "Hello World" in a nice box to make it feel more official.
 
-TBD
+But in order to support running 3rd party packages, our JavaScript Github Action must be bundled together with its dependency (just like if we were deploying a front end app).
+
+- Install `boxen` inside `test-action` folder using the terminal:
+```bash
+npm i boxen
+```
+- Update `index.js` to use `boxen`:
+```javascript
+// In index.js
+const boxen = require('boxen');
+ 
+console.log(boxen('HELLO WORLD!!', {padding: 1}));
+```
+- Check everything so far is working by running `index.js` with node in the terminal
+```bash
+node index.js
+
+# Should output:
+┌───────────────────┐
+│                   │
+│   HELLO WORLD!!   │
+│                   │
+└───────────────────┘
+```
+
