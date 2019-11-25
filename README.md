@@ -6,6 +6,7 @@ This will be a simple walkthrough creating your very first JavaScript Github Act
 
 - Use an existing repository or make a brand new repository
 > You can run the Github Action from the repository it lives in or run it from another repositories action.
+
 - Create a `.github` folder and the root of your directory
 - Create a `actions` folder inside of `.github` folder
 
@@ -13,19 +14,23 @@ This will be a simple walkthrough creating your very first JavaScript Github Act
 Now we have basic folder structure. Lets make our first JavaScript Github Action.
 
 - Create a `test-action` folder inside of the previously created `actions` folder.
-- Inside of `test-action` initalize a npm package by running
+- Inside of `test-action` initialize a npm package by running
 ```bash
 npm init -y
 ```
 - Now create a `index.js` file
+
 > This index.js file will contain the logic we will run for our Github Action
+
 - Open up `index.js` and lets add a simple Hello World
 ```javascript
 // Inside of index.js
 console.log('Hello World!)
 ```
 - Create an `action.yml` file inside `test-action` folder
+
 > This is a special file for Github Actions, it helps tell Github information about your action and how to run it
+
 - Insert the following into `action.yml` the following:
 ```yaml
 name: Hello-World
@@ -41,6 +46,7 @@ Next we need to create a Github Action Workflow that will run our brand new Java
 
 1. On Github.com in your repostory page directly
 1. Locally be manually creating the dependent folder and files
+
 > Doing it manually is a little more work since on Github.com you can start with using the template boilerplate.
 
 I will going through Method 1. Once were done with Method 1, it will be easy to say how to do it manually.
@@ -48,14 +54,19 @@ I will going through Method 1. Once were done with Method 1, it will be easy to 
 ### Creating your Workflow on Github.com
  - Navigate to your repository homepage on Github
  - On the top bar next to `Pull Requests` click on `▶️ Actions`
- > When you dont have any Github Action Workflows for your repository you will see a "Getting Started" kind of page. It will suggest Github Actions you can start with based off the main language of your repository.
- - Ignore the suggestiong and click on `Setup and workflow yourself` button located on the right side of the page.
- > You will be taken to the standard Github file create/edit screen with a TWIST (very twisty)! On the right margin you will have a WYSIWYG sort of thing to fill in Github Actions that might be of use. This will be attempt to make a `main.yml` file inside of `.github/workflow/`.
+ 
+> When you dont have any Github Action Workflows for your repository you will see a "Getting Started" kind of page. It will suggest Github Actions you can start with based off the main language of your repository.
 
- > This YAML file will run an entire workflow, executing our desired Github Actions or commands.
- - In our `main.yml` put the following in:
- ```yaml
- name: CI # Name of our workflow
+- Ignore the suggestion and click on `Setup and workflow yourself` button located on the right side of the page.
+
+> You will be taken to the standard Github file create/edit screen with a TWIST (very twisty)! On the right margin you will have a WYSIWYG sort of thing to fill in Github Actions that might be of use. This will be attempt to make a `main.yml` file inside of `.github/workflow/`.
+
+> This YAML file will run an entire workflow, executing our desired Github Actions or commands.
+
+- In our `main.yml` put the following in:
+
+```yaml
+name: CI # Name of our workflow
 
 on: [push] # Repository event that will trigger the workflow
 
@@ -69,20 +80,27 @@ jobs:
     - uses: ./.github/actions/test-action # Tell it to run out JS Action
 ```
 - Commit the file on Github
+
 > Since we just made our workflow file and it triggers on `push`. Github should actually attempt to run our workflow and trigger our JavaScript action. Let's go check it out!
 
 ## Checking Executed Workflows
 - On the top bar next to `Pull Requests` click on `▶️ Actions`
+
 > This page will look completely different since that last time we visited it. Since we now have a workflow, it will display the history of our workflow runs.
 
 > In the table for `All Workflows` you should see a job called `CI` that is currently running or has completed (depending on how fast you got to this page after committing the workflow.
+
 - Click on name `CI` to view the workflow details.
+
 > You will see a UI displaying the various steps your workflow went through during is execution process.
+
 - Click on `Run /./.github/actions/test-action` if its not already expanded.
+
 > If the step has completed executing it will be expanded showing you what is going on during that step. If it has been completed it will be collapsed.
+
 - You should see our console log of `Hello World!`
 
-Congratulations you just made your on JavaScript Github Action and Workflow to run it!!!!!
+Congratulations you just made your own JavaScript Github Action and Workflow to run it!!!!!
 
 ## Support Using Packages in JavaScript Actions
 Doing a plain console log is nice and all but its looking kinda plain. Lets spice it up a little by giving the "Hello World" some flair. By using `Boxen` package to put our "Hello World" in a nice box to make it feel more official.
@@ -112,6 +130,7 @@ node index.js
 └───────────────────┘
 ```
 > Next step is to bundle all our index.js together with our dependencies, in this case Boxen. Webpack will be used in this situation but you can use a number of other bundlers as an alternative.
+
 - Inside `test-action` folder run the following command in the terminal:
 ```bash
 npm i -D webpack webpack-cli
@@ -133,6 +152,7 @@ module.exports = {
 }
 ```
 > Although Webpack 4 has made major improvements so that a configuration file is not needed, it is still valuable to create one to demystify whats going on when you move to the build step.
+
 - Inside `test-action` open `package.json` and inside of `scripts` attribute add a build command:
 ```javascript
 {
@@ -146,15 +166,28 @@ module.exports = {
 }
 ```
 > `build` will run webpack which will take a look at the config file and output a production bundle of `index.js` inside of `dist` folder.
-- Now run create our bundle for Github to run the action in the terminal:
+
+- Now create our bundle for Github to run the action in the terminal:
 ```bash
 npm run build
 ```
+
 > A new folder called `dist` should have been created containing an `index.js` file. If you open it up you will see a lot of code, since our file also includes the code for our `Boxen` dependency.
+
+> Github doesnt know yet how to run our new bundled action, right now it will only run the normal `index.js`. So you will need to update `action.yml` inside of `test-action` to run `dist/index.js`:
+
+```yaml
+name: Hello-World
+description: Example hello world running JavaScript Github Action
+runs:
+  using: node12
+  main: dist/index.js # This changed to point to our new JavaScript bundle
+```
+
 - Lastly commit all the new files and push it up to Github
 
 ## Checking on Our Newly Updated Github Action
-Now that our Github Action has a little more sizzle, razzle dazzle, spiciness, and the new code has just been pushed. The Github Workflow should had been triggered and the new `Hello World` message.
+Now that our Github Action has a little more sizzle, razzle-dazzle, spiciness, and the new code has just been pushed. The Github Workflow should had been triggered and the new `Hello World` message.
 - On the top bar next to `Pull Requests` click on `▶️ Actions`
 - Click on latest `CI` to view the workflow details.
 - Click on `Run /./.github/actions/test-action` if its not already expanded.
